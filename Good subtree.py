@@ -1,16 +1,22 @@
- class solution:
-     def goodSubtrees(self, root, k):
-        #code here
-        
-        def dfs(node, ans):
-            if node is None:
-                return 0
-            res = (1<<node.data)
-            res = res | dfs(node.left, ans) | dfs(node.right, ans)
-            if bin(res).count("1") <= k:
-                ans[0] += 1
-            return res
+class Solution:
+    def goodSubtrees(self, root, k):
+        def solve(root,k,ans):
+            if root is None:
+                return set()
             
-        ans = [0]
-        dfs(root, ans)
+            left=solve(root.left,k,ans)
+            right=solve(root.right,k,ans)
+            
+            left.add(root.data)
+            left.update(right)
+            
+            if(len(left)<=k):
+                ans[0]+=1
+            
+            return left
+            
+            
+        ans=[0]
+        solve(root,k,ans)
+        
         return ans[0]
